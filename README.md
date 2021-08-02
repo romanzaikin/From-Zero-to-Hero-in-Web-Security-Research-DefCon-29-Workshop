@@ -12,6 +12,14 @@ In this workshop we will teach you how to find vulnerabilities in web security a
 - mongo db
 
 
+# Workshop Objectives
+- You will learn web vulnerability research based on our findings at Check Point Software Technologies.
+- We will show you everything from both attacker and defender perspective.
+- You will practice everything in a lab we built for Def Con 29
+- You will learn how to chain Web Vulnerabilities to exploit modern applications.
+- Have Fun!
+
+
 # Instructions
 1. npm install
 2. rename the directory "git" to ".git" in the "public" folder
