@@ -1,2 +1,12 @@
-# defcon_training
-From Zero to Hero in Web Security Research - Def Con 29 Workshop
+# From ZERO To HERO In Web Security Research
+by \<CPR> 
+
+
+# Prerequisites
+- node
+- mongo db
+
+
+# Instructions
+1. npm install 
+2. start the challenge at: http://127.0.0.1:3000

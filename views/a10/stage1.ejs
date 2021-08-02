@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<% include ../pages/header %>
+<body>	<!-- Fixed navbar -->
+<section class="cyberpunk black">
+	<a href="/">🤘 main page</a>
+
+	<h1 class="cyberpunk">
+		Improper Error Handling < <%= stage %> >
+	</h1>
+	<p class="cyberpunk inverse dotted scannedh">
+		Improper error handling flaws occur when an error message that's displayed to an end user provides clues about how an application or website operates. Although messages like this can help developers fix problems on their sites, they also show attackers information that they can use to help them break into the application.
+		<br/><br/>
+		<kbd>Your mission</kbd> - Try to fuzz the parameter and find an <b>"improper error handling"<b/>
+	<p/>
+</section>
+<section class="cyberpunk">
+	<br>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-offset-2 col-md-8">
+				<h4>Simple Calculator:</h4>
+				<input class="cyberpunk" type="text" placeholder="(3+3)*2" id="calc">
+
+				<br/>
+
+				<h2 class="cyberpunk" id="notification" hidden="true"></h2>
+
+				<div class="center-cyberpunk">
+					<button type="submit" class="cyberpunk2077 red" id="search">Submit_</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<section class="cyberpunk black">
+</section>
+
+<script>
+    $("#search").click(function () {
+
+        $.ajax({
+            url: "/api/safe_calc",
+            type: "POST",
+			contentType: "application/json",
+            data: `{"calc":"${calc.value}"}`,
+            success: function(data)
+            {
+                $("#notification").show(500).html(data.msg);
+            }
+        });
+    });
+
+</script>
+</body>
+</html>

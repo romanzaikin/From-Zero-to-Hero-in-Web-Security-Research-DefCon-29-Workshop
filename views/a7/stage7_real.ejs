@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<% include ../pages/header %>
+<body>
+	<section class="cyberpunk black">
+		<a href="/">🤘 main page</a>
+
+		<h1 class="cyberpunk">
+			A7 - Cross-Site Scripting < <%= stage %> >
+		</h1>
+		<p class="cyberpunk inverse dotted scannedh">
+			Cross-site Scripting (XSS) is a code injection technique. That allows the attacker to execute scripts in a web browser of the victim by including malicious code in a legitimate web page or web application.
+			<br/><br/>
+			<kbd>Your mission</kbd> - Create XSS POC, reopen the browser and make it works.<b/>
+		<p/>
+	</section>
+
+	<section class="cyberpunk">
+		<br>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-offset-2 col-md-8">
+					<form method="get" action="">
+						<h4>Search for your favorite food:</h4>
+						<input class="cyberpunk" type="text" placeholder="Apple" id="input" name="search">
+						<br/>
+
+						<h2 class="cyberpunk" id="notification">
+							<%- search %>
+						</h2>
+
+						<div class="center-cyberpunk">
+							<button type="submit" class="cyberpunk2077 red">Submit_</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="cyberpunk black">
+	</section>
+
+</body>
+</html>

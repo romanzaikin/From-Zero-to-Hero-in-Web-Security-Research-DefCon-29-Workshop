@@ -1,0 +1,3 @@
+Simple log file -
+[Sun Jul 25 06:25 2021] [wsgi:warn] [pid 1337] mod_wsgi: Compiled for Python/2.7.11+.
+[Sun Jul 25 06:25 2021] [wsgi:warn] [pid 1337] mod_wsgi: Runtime using Python/2.7.12.

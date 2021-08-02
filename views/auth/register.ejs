@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<% include ../pages/header %>
+<body>
+	<section class="cyberpunk black">
+		<a href="/">🤘 main page</a>
+
+		<h1 class="cyberpunk">
+			Register
+		</h1>
+		<p class="cyberpunk inverse dotted scannedh">
+			This is a simple registration page, some of the challenges requires you to have a user and here you can create one.
+			<br/><br/>
+		<p/>
+	</section>
+
+	<section class="cyberpunk">
+		<br>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-offset-2 col-md-8">
+					<h2 class="cyberpunk">Register:</h2>
+					<input type="text" class="cyberpunk" placeholder="Insert your username" id="username">
+					<input type="text" class="cyberpunk" placeholder="Insert your email" id="email">
+					<input type="password" class="cyberpunk" placeholder="Insert your password" id="password">
+
+					<h2 class="cyberpunk" id="notification" hidden="true"></h2>
+
+					<div class="center-cyberpunk">
+						<button type="submit" class="cyberpunk2077 red" id="search">Submit_</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="cyberpunk black">
+	</section>
+
+	<script>
+		$("#search").click(function () {
+			$.ajax({
+				url: "/api/register",
+				type: "POST",
+				contentType: "application/json",
+				data: JSON.stringify(
+					{
+						"username": $("#username").val(),
+						"email":$("#email").val(),
+						"password":$("#password").val()
+					}
+				),
+				success: function(data)
+				{
+					$("#notification").show(500).html(data.msg);
+				}
+			});
+		});
+	</script>
+</body>
+</html>

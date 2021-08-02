@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<% include ../pages/header %>
+<body>	<!-- Fixed navbar -->
+<section class="cyberpunk black">
+    <a href="/">🤘 main page</a>
+
+    <h1 class="cyberpunk">
+        A9 Using Components with known vulnerabilities
+    </h1>
+    <p class="cyberpunk inverse dotted scannedh">
+        While it is easy to find already-written exploits for many known vulnerabilities, other vulnerabilities require concentrated effort to develop a custom exploit.
+        <br/><br/>
+        <kbd>Your mission</kbd> - Try to find the vulnerable package used and exploit it by reading the file "/etc/passwd".
+    <p/>
+</section>
+<section class="cyberpunk">
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-offset-2 col-md-8">
+                <h4>Simple Calculator:</h4>
+                <input class="cyberpunk" type="text" placeholder="(3+3)*2" id="calc">
+
+                <br/>
+
+                <h2 class="cyberpunk" id="notification" hidden="true"></h2>
+
+                <div class="center-cyberpunk">
+                    <button type="submit" class="cyberpunk2077 red" id="search">Submit_</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="cyberpunk black">
+</section>
+
+<script>
+    $("#search").click(function () {
+
+        fetch("/api/calc",
+            {
+                method: "POST",
+                credentials: "same-origin",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body:  JSON.stringify({"calc": calc.value})
+            })
+            .then((resp) => resp.json())
+            .then(function(data) {
+                $("#notification").html(data.msg);
+            });
+    });
+</script>
+</body>
+</html>

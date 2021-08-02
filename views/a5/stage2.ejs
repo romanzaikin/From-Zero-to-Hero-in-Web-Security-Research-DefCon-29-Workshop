@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<% include ../pages/header %>
+<body>
+	<section class="cyberpunk black">
+		<a href="/">🤘 main page</a>
+
+		<h1 class="cyberpunk">
+			A5 - Security Misconfiguration < <%= stage %> >
+		</h1>
+		<p class="cyberpunk inverse dotted scannedh">
+			Local File Inclusion is the process of including files, that are already locally present on the server, through the exploiting of vulnerable inclusion procedures implemented in the application.
+			<br/><br/>
+			<kbd>Your mission</kbd> - Try to find another local application and access the secret api at /secret.<b/>
+		<p/>
+	</section>
+
+	<section class="cyberpunk">
+		<br>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-offset-2 col-md-8">
+					<h1 class="cyberpunk">Logs content</h1>
+					<textarea class="cyberpunk" cols="10" rows="10">
+								<%= output %>
+					</textarea>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="cyberpunk black">
+	</section>
+
+</body>
+</html>

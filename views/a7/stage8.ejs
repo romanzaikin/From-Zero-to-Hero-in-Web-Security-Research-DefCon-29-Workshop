@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<% include ../pages/header %>
+<body>
+
+	<section class="cyberpunk black">
+		<a href="/">🤘 main page</a>
+
+		<h1 class="cyberpunk">
+			Content Security Policy < <%= stage %> >
+		</h1>
+		<p class="cyberpunk inverse dotted scannedh">
+			Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks, including Cross Site Scripting (XSS) and data injection attacks. These attacks are used for everything from data theft to site defacement and distribution of malware.
+			<br/><br/>
+			<kbd>Your mission</kbd> - Try to inject alert('CPR') in the input field.<b/>
+		<p/>
+	</section>
+
+	<section class="cyberpunk">
+		<br>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-offset-2 col-md-8">
+					<h4>Search for your favorite food:</h4>
+					<input type="text" class="cyberpunk" placeholder="Apple" id="input">
+
+					<form action="/upload" method="POST" enctype="multipart/form-data" onsubmit="send_file()">
+						<input type="file" name="file" id="file" accept=".jpg"/>
+						<input type="submit" value="upload" />
+					</form>
+
+					<br>
+					<b>
+						<span id='notification'></span>
+						<hr/>
+						<% if (typeof image != "undefined") { %>
+							<img class='img-responsive' src='/uploads/<%= image %>'>
+						<% } %>
+					</b>
+
+					<h2 class="cyberpunk" id="notification" hidden="true"></h2>
+
+					<div class="center-cyberpunk">
+						<button type="submit" class="cyberpunk2077 red" id="search">Submit_</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="cyberpunk black">
+	</section>
+
+	<script src="/assets/js/stage8.js"></script>
+</body>
+</html>

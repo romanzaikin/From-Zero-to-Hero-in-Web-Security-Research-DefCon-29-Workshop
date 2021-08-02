@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<% include ../pages/header %>
+<body>
+
+	<section class="cyberpunk black">
+		<a href="/">🤘 main page</a>
+
+		<h1 class="cyberpunk">
+			A3 - Sensitive Data Exposure < <%= stage %> >
+		</h1>
+		<p class="cyberpunk inverse dotted scannedh">
+			Rather than directly attacking crypto, attackers steal keys, or steal clear text data off the server, Developers sometimes forget test cases or other files on production servers.
+			<br/><br/>
+			<kbd>Your mission</kbd> - Try to get access to the git directory.<b/>
+		<p/>
+	</section>
+
+	<section class="cyberpunk">
+		<br>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-offset-2 col-md-8">
+
+					<h1 class="cyberpunk">Where is the github???</h4>
+
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="cyberpunk black">
+	</section>
+
+<script>
+    $("#search").click(function () {
+		fetch("/api/xxe/stage/1",
+			{
+				method: "POST",
+				headers: {
+					'Content-Type': 'text/xml'
+				},
+				body:  `<creds><user>${username.value}</user><pass>${password.value}</pass></creds>`
+			})
+			.then((resp) => resp.json())
+			.then(function(data) {
+				$("#notification").show(500).html(data.msg);
+			});
+    });
+
+</script>
+</body>
+</html>

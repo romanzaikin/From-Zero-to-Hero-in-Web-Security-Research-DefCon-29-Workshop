@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<% include ../pages/header %>
+<body>
+
+	<section class="cyberpunk black">
+		<a href="/">🤘 main page</a>
+
+		<h1 class="cyberpunk">
+			A2 - Broken Authentication < <%= stage %> >
+		</h1>
+		<p class="cyberpunk inverse dotted scannedh">
+			Authentication and session management includes all aspects of handling user authentication and managing active sessions. While authentication itself is critical aspect to secure, even solid authentication mechanisms can be undermined by flawed credential management functions.
+			<br/><br/>
+			<kbd>Your mission</kbd> - Try to login to the user "roman"! <b/>
+		<p/>
+	</section>
+
+	<section class="cyberpunk">
+		<br>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-offset-2 col-md-8">
+
+					<h2 class="cyberpunk">Login:</h2>
+					CREDENTIALS: <input type="text" class="cyberpunk" placeholder="Insert your username\email" id="creds">
+					<br/>
+					PASSWORD: <input type="text" class="cyberpunk" placeholder="Insert your password" id="password">
+
+					<h2 class="cyberpunk" id="notification" hidden="true"></h2>
+
+					<div class="center-cyberpunk">
+						<button type="submit" class="cyberpunk2077 red" id="search">Submit_</button>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="cyberpunk black">
+	</section>
+
+	<script>
+		$("#search").click(function () {
+			$.ajax({
+				url: "/api/login_uuid",
+				type: "POST",
+				contentType: "application/json",
+				data: JSON.stringify(
+					{
+						"creds": $("#creds").val(),
+						"password": $("#password").val()
+					}
+				),
+				success: function(data)
+				{
+
+					$.ajax({
+						url: "/api/login_uuid_verify",
+						type: "POST",
+						contentType: "application/json",
+						data: JSON.stringify(
+							{
+								"creds": $("#creds").val(),
+								"uuid": data.token
+							}
+						),
+						success: function(data)
+						{
+							$("#notification").show(500).html(data.msg);
+						}
+					});
+
+				}
+			});
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<% include ../pages/header %>
+<body>	<!-- Fixed navbar -->
+	<section class="cyberpunk black">
+		<a href="/">🤘 main page</a>
+
+		<h1 class="cyberpunk">
+			Cross-Site Request Forgery < <%= stage %> >
+		</h1>
+		<p class="cyberpunk inverse dotted scannedh">
+			Cross-Site Request Forgery (CSRF) is an attack that forces an end user to execute unwanted actions on a web application in which they’re currently authenticated.
+
+			<br/><br/>
+			<kbd>Your mission</kbd> - Try to perform Clickjacking<b/>
+		<p/>
+	</section>
+
+	<section class="cyberpunk">
+		<br>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-offset-4 col-md-4">
+					<b style="font-size:20px">Likes : <kbd id="likes">0</kbd></b>
+					<button type="submit" class="cyberpunk2077 red" id="search">Like_</button>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="cyberpunk black">
+	</section>
+
+</body>
+<script>
+    $("#search").click(function () {
+
+		fetch("/api/clickjacking/stage/1",{
+			credentials: "same-origin",
+		})
+		.then((resp) => resp.json())
+		.then(function (data) {
+			$("#likes").html(String(data.msg));
+		});
+    });
+
+</script>
+</html>

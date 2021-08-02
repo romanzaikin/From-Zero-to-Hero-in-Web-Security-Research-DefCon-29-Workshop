@@ -1,0 +1,25 @@
+{
+  "name": "defcon29",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node bin/www"
+  },
+  "dependencies": {
+    "body-parser": "~1.19.0",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "ejs": "~2.6.1",
+    "express": "~4.16.4",
+    "express-fileupload": "~1.2.1",
+    "express-session": "~1.17.2",
+    "html-entities": "~2.3.2",
+    "http-errors": "~1.6.3",
+    "libxmljs": "~0.19.7",
+    "mathjs": "~3.10.1",
+    "mongoose": "~5.12.7",
+    "morgan": "~1.9.1",
+    "request": "~2.88.2",
+    "uuid4": "~2.0.2"
+  }
+}
