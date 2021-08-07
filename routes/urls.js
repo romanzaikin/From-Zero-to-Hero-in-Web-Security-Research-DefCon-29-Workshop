@@ -94,7 +94,7 @@ router.get('/a7/stage/:id', function(req, res, next) {
                         search: req.query.search,
                     });
             }else{
-                return res.redirect("/a7/stage/7?callback=/xss/stage/7_real");
+                return res.redirect("/a7/stage/7?callback=/a7/stage/7_real");
             }
 
         default:
