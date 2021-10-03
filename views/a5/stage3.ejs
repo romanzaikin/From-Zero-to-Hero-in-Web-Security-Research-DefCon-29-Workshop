@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<% include ../pages/header %>
+<body>
+
+	<section class="cyberpunk black">
+		<a href="/">🤘 main page</a>
+
+		<h1 class="cyberpunk">
+			Parameter Tampering < <%= stage %> >
+		</h1>
+		<p class="cyberpunk inverse dotted scannedh">
+			Parameter tampering is a form attack in which certain parameters in the (URL) or Web page form field data entered by a user are change the user authorization and scope.
+			<br/><br/>
+			<kbd>Your mission</kbd> try to login to a different user <b/>
+		<p/>
+	</section>
+
+	<section class="cyberpunk">
+		<br>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-offset-2 col-md-8">
+
+					<h2 class="cyberpunk">Login:</h2>
+					USER: <input type="text" disabled="disabled" class="cyberpunk" placeholder="Insert your username\email" id="creds">
+					<br/>
+					SCORE: <input type="text" disabled="disabled" class="cyberpunk" placeholder="Insert your password" id="score">
+
+					<h2 class="cyberpunk" id="notification" hidden="true"></h2>
+
+					<div class="center-cyberpunk">
+						<button type="submit" class="cyberpunk2077 red" id="search">Submit_</button>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="cyberpunk black">
+	</section>
+
+	<script>
+		$.ajax({
+			url: "/api/get_score/<%= username %>",
+			type: "POST",
+			contentType: "application/json",
+			data: JSON.stringify({}),
+			success: function(data)
+			{
+				$("#creds").val(data.username);
+				$("#score").val(data.score);
+			}
+
+		});
+	</script>
+</body>
+</html>

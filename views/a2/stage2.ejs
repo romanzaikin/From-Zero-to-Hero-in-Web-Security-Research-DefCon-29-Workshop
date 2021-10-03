@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<% include ../pages/header %>
+<body>
+
+	<section class="cyberpunk black">
+		<a href="/">🤘 main page</a>
+
+		<h1 class="cyberpunk">
+			Insufficient Anti Automation < <%= stage %> >
+		</h1>
+		<p class="cyberpunk inverse dotted scannedh">
+			Insufficient Anti-automation is when a web site permits an attacker to automate a process that should only be performed manually. Certain web site functionalities should be protected against automated attacks.
+			<br/><br/>
+			<kbd>Your mission</kbd> - Guess my password it's a number between 1000 to 9000 <b/>
+		<p/>
+	</section>
+
+	<section class="cyberpunk">
+		<br>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-offset-2 col-md-8">
+
+					<h2 class="cyberpunk">Login:</h2>
+					CREDENTIALS: <input type="text" disabled="disabled" class="cyberpunk" placeholder="Insert your username\email" id="creds" value="roman">
+					<br/>
+					PASSWORD: <input type="text" class="cyberpunk" placeholder="Insert your password" id="password">
+
+					<h2 class="cyberpunk" id="notification" hidden="true"></h2>
+
+					<div class="center-cyberpunk">
+						<button type="submit" class="cyberpunk2077 red" id="search">Submit_</button>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="cyberpunk black">
+	</section>
+
+	<script>
+		const ascii_to_hex = (str) => {
+			let arr1 = [];
+			for (let n = 0, l = str.length; n < l; n ++)
+			{
+				let hex = Number(str.charCodeAt(n)).toString(16);
+				arr1.push(hex);
+			}
+			return arr1.join('');
+		}
+
+		$("#search").click(function () {
+			if (ascii_to_hex($("#password").val()) == $("#anti_automation_password").val()){
+					$("#notification").show(500).html("welcome roman, role: admin").delay(2500).hide(500);
+			}else{
+				$("#notification").show(500).html("wrong password").delay(2500).hide(500);
+			}
+		});
+	</script>
+
+	<input type="hidden" value="<%= password %>" id="anti_automation_password">
+</body>
+</html>

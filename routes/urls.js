@@ -6,6 +6,7 @@ const request = require('request');
 const router = express.Router();
 
 
+
 /* INDEX. */
 router.get(['/','/index'], function(req, res, next) {
 
@@ -146,6 +147,7 @@ router.get('/a6/stage/:id', function(req, res, next) {
 /* A5 stages. */
 router.get('/a5/stage/:id', function(req, res, next) {
     let url = "";
+    let sess = req.session;
 
     switch (req.params.id) {
         case "1":
@@ -176,6 +178,14 @@ router.get('/a5/stage/:id', function(req, res, next) {
                     });
             });
             break;
+
+        case "3":
+            return res.render(`a5/stage${req.params.id}`,
+                {
+                    title: `Stage${req.params.id}`,
+                    stage: req.params.id,
+                    username: sess.username
+                });
 
         default:
             return res.render("a5/stage1",{title:"Stage1", stage: 1});
@@ -216,9 +226,42 @@ router.get('/a3/stage/:id', function(req, res, next) {
 });
 
 /* A2 stages. */
+const ascii_to_hex = (str) => {
+
+    let arr1 = [];
+    for (let n = 0, l = String(str).length; n < l; n ++)
+    {
+        let hex = Number(String(str).charCodeAt(n)).toString(16);
+        arr1.push(hex);
+    }
+    return arr1.join('');
+}
+
+
 router.get('/a2/stage/:id', function(req, res, next) {
+    let sess = req.session;
+
     switch (req.params.id) {
         case "1":
+            return res.render(`a2/stage${req.params.id}`,
+                {
+                    title: `Stage${req.params.id}`,
+                    stage: req.params.id,
+                });
+        case "2":
+            sess.anti_automation_password = ascii_to_hex(Math.floor(Math.random() * 9000) + 1000);
+
+            return res.render(`a2/stage${req.params.id}`,
+                {
+                    title: `Stage${req.params.id}`,
+                    stage: req.params.id,
+                    password: sess.anti_automation_password
+                });
+
+        case "3":
+        case "4":
+            sess.anti_automation_password = ascii_to_hex(Math.floor(Math.random() * 9000) + 1000);
+
             return res.render(`a2/stage${req.params.id}`,
                 {
                     title: `Stage${req.params.id}`,

@@ -38,6 +38,7 @@ function middleware_nosqli_fix(req, res, next) {
     next();
 }
 
+
 // A10-9 - USING COMPONENTS WITH KNOWN VULN
 router.post('/api/safe_calc', function(req, res, next) {
 
@@ -256,6 +257,28 @@ router.get('/api/secret', function(req, res, next) {
     }
 });
 
+router.post('/api/get_score/:username', function(req, res, next) {
+    let sess = req.session;
+
+    user.findOne({
+        $or: [{
+            "username": req.params.username.toLowerCase()
+        }, {
+            "email": req.params.username.toLowerCase()
+        }],
+
+    }, (err, docs) => {
+        if (err) console.log(err);
+
+        if (docs == null || docs.length == 0) {
+            return res.json({ success: false, msg: "username not found"});
+        }
+
+        return res.json({ score: docs.score, username: docs.username });
+    });
+
+});
+
 // A4 - XXE
 router.post('/api/xxe/stage/:id', function(req, res, next) {
     switch (req.params.id){
@@ -270,7 +293,7 @@ router.post('/api/xxe/stage/:id', function(req, res, next) {
 });
 
 
-// A2 - part 1 - login uuid
+// A2 - Broken Authentication
 router.post('/api/login_uuid', function(req, res, next) {
 
     user.findOne({
@@ -292,8 +315,6 @@ router.post('/api/login_uuid', function(req, res, next) {
     });
 
 });
-
-// A2 - part 2 - login verify
 router.post('/api/login_uuid_verify', function(req, res, next) {
 
     user.findOne({uuid: req.body.uuid}, (err, docs) => {
@@ -321,6 +342,28 @@ router.post('/api/login_uuid_verify', function(req, res, next) {
     });
 
 });
+
+// A2 - insufficient Anti Automation
+router.post('/api/login_anti_automation/:id', function(req, res, next) {
+
+    let sess = req.session;
+
+    if (req.params.id == 1){
+        if (req.body.password == sess.anti_automation_password){
+            return res.json({ msg: sess.anti_automation_password });
+        }
+    }else{
+        if (req.body.password == sess.anti_automation_password){
+            return res.json({ msg: `welcome roman, role: admin` });
+        }else{
+            return res.json({ msg: `wrong password` });
+        }
+    }
+
+
+});
+
+
 
 // A1 - noSQLi
 router.post('/api/login_safe', middleware_nosqli_fix, function(req, res, next) {
@@ -390,7 +433,8 @@ router.post('/api/register', function(req, res, next) {
                 email: "romanza@checkpoint.com",
                 password: "IKnowSQLiInjection",
                 role: "admin",
-                uuid: uuid4()
+                uuid: uuid4(),
+                score: 1337
             }).save();
         }
 

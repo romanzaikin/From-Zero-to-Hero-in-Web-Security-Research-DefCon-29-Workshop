@@ -8,7 +8,8 @@ const userDataSchema = new Schema({
     password: String,
     email: String,
     role: String,
-    uuid: String
+    uuid: String,
+    score:  { type: Number, default: 0 }
 });
 
 let user = module.exports = mongoose.model('users', userDataSchema);
