@@ -122,7 +122,6 @@ router.get('/api/user', function(req, res, next) {
     res.status(200).send(req.headers["user-agent"]);
 });
 
-
 // A6 - CORS | CSRF
 router.get('/api/whoami', function(req, res, next) {
     let sess = req.session;
@@ -278,6 +277,42 @@ router.post('/api/get_score/:username', function(req, res, next) {
     });
 
 });
+
+router.post('/api/add_score/:username', function(req, res, next) {
+    let sess = req.session;
+
+    if (sess.username != req.params.username){
+        return res.json({ success: false, msg: `You are not ${req.params.username}`});
+    }
+
+    if (req.body.score != (req.body.hash ^ 0x07)){
+        return res.json({ success: false, msg: "wrong hash"});
+    }
+
+    user.updateOne({
+        $or: [{
+            "username": req.params.username.toLowerCase()
+        }, {
+            "email": req.params.username.toLowerCase()
+        }]},{
+        $set: {
+           "score" : req.body.score
+        }
+
+    }, (err, docs) => {
+        if (err) console.log(err);
+
+        if (docs == null || docs.length == 0) {
+            return res.json({ success: false, msg: "username not found"});
+        }
+
+        return res.json({ success: true });
+    });
+
+});
+
+
+
 
 // A4 - XXE
 router.post('/api/xxe/stage/:id', function(req, res, next) {

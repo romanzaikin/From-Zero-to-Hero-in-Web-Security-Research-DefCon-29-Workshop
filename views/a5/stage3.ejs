@@ -12,7 +12,7 @@
 		<p class="cyberpunk inverse dotted scannedh">
 			Parameter tampering is a form attack in which certain parameters in the (URL) or Web page form field data entered by a user are change the user authorization and scope.
 			<br/><br/>
-			<kbd>Your mission</kbd> try to login to a different user <b/>
+			<kbd>Your mission</kbd> try to get a 500 point <b/>
 		<p/>
 	</section>
 
@@ -30,7 +30,7 @@
 					<h2 class="cyberpunk" id="notification" hidden="true"></h2>
 
 					<div class="center-cyberpunk">
-						<button type="submit" class="cyberpunk2077 red" id="search">Submit_</button>
+						<button type="submit" class="cyberpunk2077 red" id="add_score">PLAY</button>
 					</div>
 
 				</div>
@@ -52,7 +52,21 @@
 				$("#creds").val(data.username);
 				$("#score").val(data.score);
 			}
+		});
 
+		$("#add_score").on("click", function (){
+
+			$("#score").val( +$("#score").val() + 1 );
+
+			$.ajax({
+				url: "/api/add_score/<%= username %>",
+				type: "POST",
+				contentType: "application/json",
+				data: JSON.stringify({
+					"score": $("#score").val(),
+					"hash": Number( $("#score").val()) ^ 0x07
+				})
+			});
 		});
 	</script>
 </body>
