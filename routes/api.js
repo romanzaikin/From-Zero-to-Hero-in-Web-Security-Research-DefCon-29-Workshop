@@ -1,12 +1,15 @@
 const express = require('express');
 const encode = require('html-entities').encode;
+
+const jwt = require('jsonwebtoken');
+
+const fs = require('fs');
+const libxmljs = require("libxmljs");
+const uuid4 = require("uuid4");
+const mathjs = require('mathjs')
+
 const user = require("../models/users");
 const forum = require("../models/forum");
-const fs = require('fs');
-const uuid4 = require("uuid4");
-
-const libxmljs = require("libxmljs");
-const mathjs = require('mathjs')
 
 
 const router = express.Router();
@@ -371,7 +374,6 @@ router.post('/api/xxe/stage/:id', function(req, res, next) {
     }
 });
 
-
 // A2 - Broken Authentication
 router.post('/api/login_uuid', function(req, res, next) {
 
@@ -442,7 +444,66 @@ router.post('/api/login_anti_automation/:id', function(req, res, next) {
 
 });
 
+// A2 - JWT
+router.post('/api/login_jwt/:type?', function(req, res, next) {
+    let sess = req.session;
+    let jwt_hash = "";
 
+    if (req.params.type == 'hs256'){
+        jwt_hash = jwt.sign(
+            { username: sess.username , role: sess.role},
+            "secret",
+            {
+                algorithm: "HS256",
+                expiresIn: "2h",
+            });
+    }else if (!req.params.type){
+        jwt_hash = jwt.sign(
+            { username: sess.username , role: sess.role},
+            "secret",
+            {
+                algorithm: "none",
+                expiresIn: "2h",
+            });
+    }else if (req.params.type == 'rs256'){
+        const privateKey = fs.readFileSync('./public/keys/jwtRS256.key');
+        jwt_hash = jwt.sign(
+            { username: sess.username , role: sess.role},
+            privateKey,
+            {
+                algorithm: "RS256",
+                expiresIn: "2h",
+            });
+    }
+
+    return res.json({ success: true, token: jwt_hash});
+});
+router.post('/api/login_jwt_relogin/:type?', function(req, res, next) {
+    let sess = req.session;
+    let jwt_hash = ""
+
+    try {
+        if (req.params.type == 'hs256') {
+            jwt_hash = jwt.verify(req.body.jwt, "secret",{algorithms: ['HS256']})
+
+        }else if (!req.params.type){
+            jwt_hash = jwt.verify(req.body.jwt)
+
+        }else if (req.params.type == 'rs256'){
+
+            const publicKey = fs.readFileSync('./public/keys/jwtRS256.key.pub');
+            jwt_hash = jwt.verify(req.body.jwt, publicKey, {algorithms: ['RS256']})
+        }
+
+
+        return res.json({ success: true, username: jwt_hash.username, role: (jwt_hash.username.includes("roman") ? "admin":"user") });
+
+    } catch (err) {
+        console.log(err);
+        return res.status(401).json({success: false, msg: "Invalid JWT"});
+    }
+
+});
 
 // A1 - noSQLi
 router.post('/api/login_safe', middleware_nosqli_fix, function(req, res, next) {
@@ -471,6 +532,7 @@ router.post('/api/login_safe', middleware_nosqli_fix, function(req, res, next) {
     });
 
 });
+
 router.post('/api/login', function(req, res, next) {
     let sess = req.session;
 

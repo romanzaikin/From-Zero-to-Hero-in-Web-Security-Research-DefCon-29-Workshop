@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<% include ../pages/header %>
+<body>
+
+	<section class="cyberpunk black">
+		<a href="/">🤘 main page</a>
+
+		<h1 class="cyberpunk">
+			A2 - Broken Authentication (JWT) < <%= stage %> >
+		</h1>
+		<p class="cyberpunk inverse dotted scannedh">
+			JSON Web Token is a standard used to create access tokens for an application. It works this way: the server generates a token that certifies the user identity, and sends it to the client.
+			<br/><br/>
+			<kbd>Your mission</kbd> - Try to login to the user "roman" by spoofing the JWT Token <b/>
+		<p/>
+	</section>
+
+	<section class="cyberpunk">
+		<br>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-offset-2 col-md-8">
+
+					USER: <input type="text" class="cyberpunk" placeholder="Your Username" id="creds">
+					<br/>
+					ROLE: <input type="text" class="cyberpunk" placeholder="Your Role" id="role">
+
+					<div class="center-cyberpunk">
+						<button type="submit" class="cyberpunk2077 red" id="search">Refresh_</button>
+					</div>
+					<br/>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="cyberpunk black">
+	</section>
+	<script src="/assets/js/jwt-decode.js"></script>
+	<script>
+		$.ajax({
+			url: "/api/login_jwt/hs256",
+			type: "POST",
+			contentType: "application/json",
+			data: JSON.stringify({}),
+			success: function(data)
+			{
+				localStorage.setItem("jwt",data.token);
+
+				$("#creds").val(jwt_decode(data.token).username);
+				$("#role").val(jwt_decode(data.token).role);
+			}
+		});
+
+		$("#search").click(function () {
+			$.ajax({
+				url: "/api/login_jwt_relogin/hs256",
+				type: "POST",
+				contentType: "application/json",
+				data: JSON.stringify({"jwt":localStorage.getItem("jwt")}),
+				success: function(data)
+				{
+					$("#creds").val(data.username);
+					$("#role").val(data.role);
+				}
+			});
+		});
+	</script>
+</body>
+</html>

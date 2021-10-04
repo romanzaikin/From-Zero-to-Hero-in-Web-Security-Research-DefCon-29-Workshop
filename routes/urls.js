@@ -249,6 +249,7 @@ router.get('/a2/stage/:id', function(req, res, next) {
                     title: `Stage${req.params.id}`,
                     stage: req.params.id,
                 });
+
         case "2":
             sess.anti_automation_password = ascii_to_hex(Math.floor(Math.random() * 9000) + 1000);
 
@@ -269,6 +270,14 @@ router.get('/a2/stage/:id', function(req, res, next) {
                     stage: req.params.id,
                 });
 
+        case "5":
+        case "6":
+        case "7":
+            return res.render(`a2/stage${req.params.id}`,
+                {
+                    title: `Stage${req.params.id}`,
+                    stage: req.params.id,
+                });
         default:
             return res.render("a2/stage1",{title:"Stage1", stage: 1});
     }
