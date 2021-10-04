@@ -74,7 +74,7 @@ router.get('/api/xss/stage/:id', function(req, res, next) {
 
       case "4":
         // add Json content-type to fix the XSS .json instead of .send
-        // res.setHeader('content-type', 'application/json');
+        //res.setHeader('content-type', 'application/json');
 
         res.setHeader('content-type', 'text/html');
         return res.status(200).send({
@@ -131,7 +131,8 @@ router.get('/api/whoami', function(req, res, next) {
     if (origin){
         res.setHeader("Access-Control-Allow-Origin", origin);
         res.setHeader("Access-Control-Allow-Credentials", "true");
-        //res.setHeader("Access-Control-Allow-Methods", "GET,POST"); //Not Mandatory
+
+        // res.setHeader("Access-Control-Allow-Methods", "GET,POST"); //Not Mandatory
     }
 
     return res.json(
@@ -329,7 +330,7 @@ router.post('/api/transfer_score/:username', function(req, res, next) {
     });
 
     // to user
-    user.updateOne({ "username": req.body.to_user},{ $inc: { "score" : +req.body.score } },(err, docs) => {
+    user.updateOne({ "_id": req.body.to_user},{ $inc: { "score" : +req.body.score } },(err, docs) => {
         if (err) console.log(err);
 
         if (docs == null || docs.length == 0) {
