@@ -311,6 +311,49 @@ router.post('/api/add_score/:username', function(req, res, next) {
 
 });
 
+// version 1
+router.post('/api/transfer_score/:username', function(req, res, next) {
+    let sess = req.session;
+
+    if (sess.username != req.params.username){
+        return res.json({ success: false, msg: `You are not ${req.params.username}`});
+    }
+
+    // from user
+    user.updateOne({ "_id": req.body.hash},{ $inc: { "score" : -req.body.score } }, (err, docs) => {
+        if (err) console.log(err);
+
+        if (docs == null || docs.length == 0) {
+            return res.json({ success: false, msg: "from username not found"});
+        }
+    });
+
+    // to user
+    user.updateOne({ "username": req.body.to_user},{ $inc: { "score" : +req.body.score } },(err, docs) => {
+        if (err) console.log(err);
+
+        if (docs == null || docs.length == 0) {
+            return res.json({ success: false, msg: "to username not found"});
+        }
+        return res.json({ success: true });
+    });
+
+});
+
+router.get('/api/all_users', function(req, res, next) {
+    let sess = req.session;
+
+    user.find({},{"username":1}, (err, docs) => {
+        if (err) console.log(err);
+
+        if (docs == null || docs.length == 0) {
+            return res.json({ success: false, msg: "username not found"});
+        }
+
+        return res.json({ success: true, users: docs });
+    });
+
+});
 
 
 

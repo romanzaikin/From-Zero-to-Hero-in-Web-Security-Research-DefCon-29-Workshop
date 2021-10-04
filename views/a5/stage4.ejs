@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<% include ../pages/header %>
+<body>
+
+	<section class="cyberpunk black">
+		<a href="/">🤘 main page</a>
+
+		<h1 class="cyberpunk">
+			Parameter Tampering < <%= stage %> >
+		</h1>
+		<p class="cyberpunk inverse dotted scannedh">
+			Parameter tampering is a form attack in which certain parameters in the (URL) or Web page form field data entered by a user are change the user authorization and scope.
+			<br/><br/>
+			<kbd>Your mission</kbd> try to get a 2000 point <b/>
+		<p/>
+	</section>
+
+	<section class="cyberpunk">
+		<br>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-offset-2 col-md-8">
+
+					<h2 class="cyberpunk">Login:</h2>
+					<input type="text" disabled="disabled" class="cyberpunk" placeholder="User" id="creds">
+					<br/>
+					<input type="text" disabled="disabled" class="cyberpunk" placeholder="Your Score" id="score">
+					<br/>
+					<h2 class="cyberpunk">TO:</h2>
+					<select class="cyberpunk" id="users_list">
+					</select>
+					<br/>
+					<input type="text" class="cyberpunk" placeholder="How many points to transfer?" id="score_transfer" value="0">
+
+					<h2 class="cyberpunk" id="notification" hidden="true"></h2>
+
+					<div class="center-cyberpunk">
+						<button type="submit" class="cyberpunk2077 red" id="transfer_score">Send_</button>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="cyberpunk black">
+	</section>
+
+	<script>
+		let user_id = 0;
+
+		$.ajax({
+			url: "/api/get_score/<%= username %>",
+			type: "POST",
+			contentType: "application/json",
+			data: JSON.stringify({}),
+			success: function(data)
+			{
+				$("#creds").val(data.username);
+				$("#score").val(data.score);
+			}
+		});
+		$.ajax({
+			url: "/api/all_users",
+			success: function(data)
+			{
+				for(let item of data.users){
+					if (item.username == "<%= username %>"){
+						user_id = item._id;
+					}else{
+						$("#users_list").append(`<option value="${item._id}"> ${item.username} </option>`)
+					}
+				}
+			}
+		});
+
+		$("#transfer_score").on("click", function (){
+			if (isNaN($("#score_transfer").val()) || +$("#score_transfer").val() <= 0){
+				$("#notification").show(500).html("Wrong number").delay(1500).hide(500);
+
+			}
+			else if (+$("#score").val() <=0 || +$("#score_transfer").val() > +$("#score").val()){
+				$("#notification").show(500).html("you don't have enough points to transfer").delay(1500).hide(500);
+
+			}
+			else{
+				$("#score").val( +$("#score").val() - +$("#score_transfer").val() );
+
+				$.ajax({
+					url: "/api/transfer_score/<%= username %>",
+					type: "POST",
+					contentType: "application/json",
+					data: JSON.stringify({
+						"score": $("#score_transfer").val(),
+						"hash": user_id,
+						"to_user": $("#users_list").val()
+					}),
+					success: function(data)
+					{
+						console.log(data)
+					}
+				});
+
+			}
+
+
+		});
+	</script>
+</body>
+</html>

@@ -180,6 +180,7 @@ router.get('/a5/stage/:id', function(req, res, next) {
             break;
 
         case "3":
+        case "4":
             return res.render(`a5/stage${req.params.id}`,
                 {
                     title: `Stage${req.params.id}`,
