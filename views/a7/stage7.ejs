@@ -21,9 +21,11 @@
 			<div class="row">
 				<div class="col-md-offset-2 col-md-8">
 					<b style="font-size:20px">Start The Challenge By Pressing start:</b>
-					<a href="/redirect?url=<%= callback ? callback : "/a7/stage/7_real" %>" class="cyberpunk2077 red">
+					<a href="/redirect?url=<%= callback ? callback : "/a7/stage/7_real" %>" class="cyberpunk2077 red" id="startChallenge">
 							START_
 					</a>
+					<hr/>
+					You will be redirected in <span id="timerChallenge">5</span> seconds
 				</div>
 			</div>
 		</div>
@@ -31,6 +33,18 @@
 
 	<section class="cyberpunk black">
 	</section>
+	<script>
+		let counter = 5;
 
+		setInterval(()=>{
+			if (counter > 0 ){
+				document.getElementById("timerChallenge").innerText = counter;
+				counter -- ;
+
+			} else {
+				document.getElementById("startChallenge").click();
+			}
+		}, 1000);
+	</script>
 </body>
 </html>

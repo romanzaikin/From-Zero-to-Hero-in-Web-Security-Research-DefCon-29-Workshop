@@ -129,9 +129,9 @@ router.get('/api/whoami', function(req, res, next) {
 
     // Allow CORS
     if (origin){
-        res.setHeader("Access-Control-Allow-Origin", origin);
-        res.setHeader("Access-Control-Allow-Credentials", "true");
-        //res.setHeader("Access-Control-Allow-Methods", "GET,POST"); //Not Mandatory
+        //res.setHeader("Access-Control-Allow-Origin", origin);
+        //res.setHeader("Access-Control-Allow-Credentials", "true");
+        //res.setHeader("Access-Control-Allow-Methods", "GET, POST"); //Not Mandatory
     }
 
     return res.json(
