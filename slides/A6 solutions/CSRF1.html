@@ -3,7 +3,8 @@
 
   fetch(url, {
     method: "POST",
-	body: JSON.stringify({"msg":"hacked"}),
+	body: JSON.stringify({"msg":"hacked with message"}),
+    mode: 'cors',
     credentials: "include",
 	headers: {
       'Content-Type': 'text/plain'

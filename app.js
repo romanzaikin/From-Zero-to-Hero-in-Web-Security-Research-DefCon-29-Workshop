@@ -19,7 +19,7 @@ app.set('view engine', 'ejs');
 app.use(function (req, res, next) {
 
   // CSP Header
-  //res.setHeader("Content-Security-Policy", "default-src 'none'; script-src 'self'; connect-src 'self'; font-src 'self'; img-src 'self'; style-src 'self' 'unsafe-inline';");
+  // res.setHeader("Content-Security-Policy", "default-src 'none'; script-src 'self'; connect-src 'self'; font-src 'self'; img-src 'self'; style-src 'self' 'unsafe-inline';");
 
   // CORS
   //res.setHeader("Access-Control-Allow-Origin", "*");
@@ -35,7 +35,7 @@ app.use(function (req, res, next) {
 });
 
 // Information Disclosure
-//app.disable('x-powered-by');
+// app.disable('x-powered-by');
 
 app.use(logger('dev'));
 app.use(express.json());

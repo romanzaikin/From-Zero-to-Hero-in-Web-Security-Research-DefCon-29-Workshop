@@ -3,7 +3,8 @@
 
   fetch(url, {
     method  : "GET",
-    credentials: "include"
+    mode: 'cors',
+    credentials: "include",
   })
   .then((resp) => resp.json())
   .then(function (data) {
