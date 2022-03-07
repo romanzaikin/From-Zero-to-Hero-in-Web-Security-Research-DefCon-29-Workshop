@@ -430,14 +430,15 @@ router.post('/api/login_anti_automation/:id', function(req, res, next) {
     let sess = req.session;
 
     if (req.params.id == 1){
-        if (req.body.password == sess.anti_automation_password){
-            return res.json({ msg: sess.anti_automation_password });
-        }
-    }else{
+        return res.json({ msg: sess.anti_automation_password });
+
+    } else {
         if (req.body.password == sess.anti_automation_password){
             return res.json({ msg: `welcome roman, role: admin` });
-        }else{
+
+        } else {
             return res.json({ msg: `wrong password` });
+
         }
     }
 

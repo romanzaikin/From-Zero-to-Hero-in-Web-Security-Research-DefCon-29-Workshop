@@ -1,14 +1,15 @@
 <script>
-  let url = "http://127.0.0.1:3000/api/whoami";
+    let url = "http://127.0.0.1:3000/api/whoami";
 
-  fetch(url, {
-    method  : "GET",
-    credentials: "include"
-  })
-  .then((resp) => resp.json())
-  .then(function (data) {
-  
-    console.log(data);
-	
-  });
+    fetch(url, {
+        method: "GET",
+        mode: 'cors',
+        credentials: "include"
+    })
+        .then((resp) => resp.json())
+        .then(function (data) {
+
+            console.log(data);
+
+        });
 </script>

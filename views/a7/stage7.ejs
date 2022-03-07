@@ -32,5 +32,17 @@
 	<section class="cyberpunk black">
 	</section>
 
+	<script>
+		let counter = 5;
+		setInterval(()=>{
+			if (counter > 0 ){
+				document.getElementById("timerChallenge").innerText = counter;
+				counter -- ;
+			} else {
+				document.getElementById("startChallenge").click();
+			}
+		}, 1000);
+	</script>
+
 </body>
 </html>
