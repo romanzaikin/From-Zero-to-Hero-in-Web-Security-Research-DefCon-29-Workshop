@@ -77,7 +77,7 @@ router.get('/api/xss/stage/:id', function(req, res, next) {
 
       case "4":
         // add Json content-type to fix the XSS .json instead of .send
-        //res.setHeader('content-type', 'application/json');
+        // res.setHeader('content-type', 'application/json');
 
         res.setHeader('content-type', 'text/html');
         return res.status(200).send({
