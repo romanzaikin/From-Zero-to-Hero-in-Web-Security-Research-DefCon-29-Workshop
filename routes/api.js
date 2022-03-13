@@ -463,7 +463,7 @@ router.post('/api/login_jwt/:type?', function(req, res, next) {
             { username: sess.username , role: sess.role},
             "secret",
             {
-                algorithm: "none",
+                algorithm: "HS256",
                 expiresIn: "2h",
             });
     }else if (req.params.type == 'rs256'){
@@ -488,7 +488,13 @@ router.post('/api/login_jwt_relogin/:type?', function(req, res, next) {
             jwt_hash = jwt.verify(req.body.jwt, "secret",{algorithms: ['HS256']})
 
         }else if (!req.params.type){
-            jwt_hash = jwt.verify(req.body.jwt)
+            try {
+                jwt_hash = jwt.verify(req.body.jwt)
+
+            } catch (e) {
+                jwt_hash = jwt.verify(req.body.jwt, "secret",{algorithms: ['HS256']})
+
+            }
 
         }else if (req.params.type == 'rs256'){
 
@@ -496,7 +502,7 @@ router.post('/api/login_jwt_relogin/:type?', function(req, res, next) {
             jwt_hash = jwt.verify(req.body.jwt, publicKey, {algorithms: ['RS256']})
         }
 
-
+        // change include to == otherwise we will have a logical bug
         return res.json({ success: true, username: jwt_hash.username, role: (jwt_hash.username.includes("roman") ? "admin":"user") });
 
     } catch (err) {
