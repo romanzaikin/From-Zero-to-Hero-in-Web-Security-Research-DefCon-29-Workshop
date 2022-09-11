@@ -19,8 +19,8 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-offset-2 col-md-8">
-				<h4>File Explorer:</h4>
-				<input class="cyberpunk" type="text" placeholder="access.log" id="file" value="access.log">
+				<h4>Simple Calculator:</h4>
+				<input class="cyberpunk" type="text" placeholder="(3+3)*2" id="calc">
 
 				<br/>
 
@@ -40,10 +40,10 @@
     $("#search").click(function () {
 
         $.ajax({
-            url: "/api/read_log",
+            url: "/api/safe_calc",
             type: "POST",
 			contentType: "application/json",
-            data: `{"file":"${file.value}"}`,
+            data: `{"calc":"${calc.value}"}`,
             success: function(data)
             {
                 $("#notification").show(500).html(data.msg);

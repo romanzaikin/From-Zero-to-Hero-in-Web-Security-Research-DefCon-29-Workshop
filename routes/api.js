@@ -4,6 +4,8 @@ const encode = require('html-entities').encode;
 const jwt = require('jsonwebtoken');
 
 const fs = require('fs');
+const path = require("path");
+
 const libxmljs = require("libxmljs");
 const uuid4 = require("uuid4");
 const mathjs = require('mathjs')
@@ -43,6 +45,26 @@ function middleware_nosqli_fix(req, res, next) {
 
 
 // A10-9 - USING COMPONENTS WITH KNOWN VULN
+router.post('/api/read_log', function(req, res, next) {
+    // const lookFor = path.join(__dirname, req.body.calc);
+    const lookFor = req.body.file;
+    let retData;
+
+    try {
+        retData = fs.readFileSync(`./public/storage/data/private/${lookFor}`).toString('utf8');
+    } catch (err) {
+        if (err.code === "EISDIR"){
+            retData = fs.readdirSync(`./public/storage/data/private/${lookFor}`).toString('utf8');
+        }else{
+            retData = err;
+        }
+    }
+
+    res.status(200).json({
+        msg:retData
+    });
+
+});
 router.post('/api/safe_calc', function(req, res, next) {
 
     // solution: https://jwlss.pw/mathjs/
@@ -67,35 +89,35 @@ router.post('/api/calc', function(req, res, next) {
 
 // A7 - XSS
 router.get('/api/xss/stage/:id', function(req, res, next) {
-  switch (req.params.id){
-    case "1":
-    case "2":
-    case "8":
-      return res.status(200).send(
-        req.query.search
-      );
+    switch (req.params.id){
+        case "1":
+        case "2":
+        case "8":
+            return res.status(200).send(
+                req.query.search
+            );
 
-      case "4":
-        // add Json content-type to fix the XSS .json instead of .send
-        // res.setHeader('content-type', 'application/json');
+        case "4":
+            // add Json content-type to fix the XSS .json instead of .send
+            // res.setHeader('content-type', 'application/json');
 
-        res.setHeader('content-type', 'text/html');
-        return res.status(200).send({
-            msg: encode(req.query.search),
-            country: req.query.country
-        });
+            res.setHeader('content-type', 'text/html');
+            return res.status(200).send({
+                msg: encode(req.query.search),
+                country: req.query.country
+            });
 
-    case "5":
-    case "6":
-        return res.status(200).json({
+        case "5":
+        case "6":
+            return res.status(200).json({
             msg: encode(req.query.search)
         });
 
-    default:
-      return res.status(200).json({
-        msg: "not found!",
-      });
-  }
+        default:
+            return res.status(200).json({
+            msg: "not found!",
+        });
+    }
 });
 // report referer url
 router.get('/report', function(req, res, next) {
@@ -132,10 +154,10 @@ router.get('/api/whoami', function(req, res, next) {
 
     // Allow CORS
     if (origin){
-        res.setHeader("Access-Control-Allow-Origin", origin);
-        res.setHeader("Access-Control-Allow-Credentials", "true");
+        // res.setHeader("Access-Control-Allow-Origin", origin);
+        // res.setHeader("Access-Control-Allow-Credentials", "true");
 
-        // res.setHeader("Access-Control-Allow-Methods", "GET,POST"); //Not Mandatory
+        // res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS"); //Not Mandatory
     }
 
     return res.json(
@@ -205,6 +227,10 @@ router.post('/api/message_token', middleware_session_verify, function(req, res, 
     let cont_type = req.headers['content-type'];
 
     // It is possible to bypass this verification by removing the csrf parameter from the request!
+
+
+
+
     if (req.body.csrf && req.body.csrf != sess.csrf){
         return res.json({ success: false ,msg: "Wrong CSRF token"});
     }

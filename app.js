@@ -19,7 +19,7 @@ app.set('view engine', 'ejs');
 app.use(function (req, res, next) {
 
   // CSP Header
-  //res.setHeader("Content-Security-Policy", "default-src 'none'; script-src 'self'; connect-src 'self'; font-src 'self'; img-src 'self'; style-src 'self' 'unsafe-inline';");
+  // res.setHeader("Content-Security-Policy", "default-src 'none'; script-src 'self'; connect-src 'self'; font-src 'self'; img-src 'self'; style-src 'self' 'unsafe-inline';");
 
   // CORS
   //res.setHeader("Access-Control-Allow-Origin", "*");
@@ -35,7 +35,7 @@ app.use(function (req, res, next) {
 });
 
 // Information Disclosure
-//app.disable('x-powered-by');
+app.disable('x-powered-by');
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -54,9 +54,14 @@ app.use(fileUpload({
 }));
 
 app.use(session({
-  secret: '156cd512-c40e-4fe3-96f6-d3489e15bcdd-eb67b26d-ba75-46a7-a441-ab82dfe24563',
-  resave: true,
-  saveUninitialized: true
+  name: 'session',
+  secret: '156cd512-c40e-4fe3-96f6-d3489e15bcdd-eb67b26d-ba75-46a7-a441-ab82dfe24562',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: false,
+    secure: false
+  }
 }))
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -83,18 +88,3 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
-
-
-/*
-/////////////////////////////
-//        References       //
-/////////////////////////////
-
-https://github.com/appsecco/dvna
-
-"mathjs": "3.10.1",
-npm install mathjs@3.10.1
-
-content-security-policy: report-uri https://www.instagram.com/security/csp_report/;
-
- */

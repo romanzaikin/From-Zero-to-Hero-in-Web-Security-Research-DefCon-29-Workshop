@@ -1,6 +1,7 @@
 const express = require('express');
 const encode = require('html-entities').encode;
 const fs = require('fs');
+
 const uuid4 = require("uuid4");
 const request = require('request');
 const router = express.Router();
@@ -20,6 +21,7 @@ router.get(['/','/index'], function(req, res, next) {
 router.get('/a10/stage/:id', function(req, res, next) {
     switch (req.params.id) {
         case "1":
+        case "2":
             return res.render(`a10/stage${req.params.id}`,
                 {
                     title: `Stage${req.params.id}`,
@@ -111,13 +113,11 @@ router.get('/a6/stage/:id', function(req, res, next) {
 
     switch (req.params.id) {
         case "1":
-        case "4":
             return res.render(`a6/stage${req.params.id}`,
                 {
                     title: `Stage${req.params.id}`,
                     stage: req.params.id,
                 });
-
 
         case "2":
             res.setHeader("Set-Cookie", `csrf=${csrf_token}; Path=/; HttpOnly`);
@@ -130,6 +130,7 @@ router.get('/a6/stage/:id', function(req, res, next) {
                 });
 
         case "3":
+        case "4":
             sess.csrf = csrf_token;
             return res.render(`a6/stage${req.params.id}`,
                 {
@@ -289,13 +290,13 @@ router.get('/a1/stage/:id', function(req, res, next) {
 
     switch (req.params.id) {
         case "1":
-        case "2":
-        case "3":
             return res.render(`a1/stage${req.params.id}`,
                 {
                     title: `Stage${req.params.id}`,
                     stage: req.params.id,
                 });
+        case "2":
+            return res.render(`a1/stage${req.params.id}`, req.query);
 
         default:
             return res.render("a1/stage1",{title:"Stage1", stage: 1});

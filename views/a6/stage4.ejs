@@ -2,47 +2,94 @@
 <html>
 <% include ../pages/header %>
 <body>	<!-- Fixed navbar -->
-	<section class="cyberpunk black">
-		<a href="/">🤘 main page</a>
+<section class="cyberpunk black">
+	<a href="/">🤘 main page</a>
 
-		<h1 class="cyberpunk">
-			Cross-Site Request Forgery < <%= stage %> >
-		</h1>
-		<p class="cyberpunk inverse dotted scannedh">
-			Cross-Site Request Forgery (CSRF) is an attack that forces an end user to execute unwanted actions on a web application in which they’re currently authenticated.
+	<h1 class="cyberpunk">
+		Cross-Site Request Forgery < <%= stage %> >
+	</h1>
+	<p class="cyberpunk inverse dotted scannedh">
+		Cross-Site Request Forgery (CSRF) is an attack that forces an end user to execute unwanted actions on a web application in which they’re currently authenticated.
 
-			<br/><br/>
-			<kbd>Your mission</kbd> - Try to perform Clickjacking<b/>
-		<p/>
-	</section>
+		<br/><br/>
+		<kbd>Your mission</kbd> - ???<b/>
+	<p/>
+</section>
 
-	<section class="cyberpunk">
-		<br>
-		<div class="container">
-			<div class="row">
-				<div class="col-md-offset-4 col-md-4">
-					<b style="font-size:20px">Likes : <kbd id="likes">0</kbd></b>
-					<button type="submit" class="cyberpunk2077 red" id="search">Like_</button>
-				</div>
+<section class="cyberpunk">
+	<br>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-3">
+				<p class="cyberpunk inverse" style="font-size: 20px;">
+					<kbd>username</kbd>:<span id="username"> </span><br/>
+					<kbd>email</kbd>:<span id="email"> </span><br/>
+					<kbd>role</kbd>:<span id="role"> </span><br/>
+				</p>
+			</div>
+
+			<div class="col-md-9">
+				<h2 class="cyberpunk">Forum</h2>
+				<div class="cyberpunk" id="forum" rows="10"></div>
+				<input type="text" placeholder="Insert your text" id="forum_text" style="width:90%">
+				<button id="forum_send" style="width:9%">
+					send
+				</button>
 			</div>
 		</div>
-	</section>
+	</div>
+</section>
 
-	<section class="cyberpunk black">
-	</section>
+<section class="cyberpunk black">
+</section>
 
 </body>
 <script>
-    $("#search").click(function () {
+	fetch("/api/whoami",{
+		credentials: "same-origin",
+	})
+			.then((resp) => resp.json())
+			.then(function (data) {
+				$("#username").html(data.username);
+				$("#email").html(data.email);
+				$("#role").html(data.role);
+			});
 
-		fetch("/api/clickjacking/stage/1",{
-			credentials: "same-origin",
-		})
-		.then((resp) => resp.json())
-		.then(function (data) {
-			$("#likes").html(String(data.msg));
+	fetch("/api/message",{
+		credentials: "same-origin",
+	})
+			.then((resp) => resp.json())
+			.then(function (data) {
+				$("#forum").val("");
+				let current_text = ""
+
+				for (item of data.msg){
+					$("#forum").append(`|${item.username}| -> ${item.msg}<br/>`);
+				}
+			});
+
+	$("#forum_send").click(function () {
+
+		$.ajax({
+			url: "/api/message_token",
+			type: "POST",
+			contentType: "application/json",
+			credentials: "include",
+			data: JSON.stringify({	"msg": $("#forum_text").val(), "csrf": "<%= csrf %>" }),
+			success: function(data)
+			{
+				$("#forum").val("");
+				let current_text = ""
+				for (item of data.msg){
+					current_text = $("#forum").val();
+					$("#forum").val(current_text + `|${item.username}| -> ${item.msg}`+"\r\n");
+				}
+
+				let forum_element = $("#forum");
+				forum_element.scrollTop(forum_element[0].scrollHeight);
+			}
 		});
-    });
 
+	});
 </script>
 </html>
