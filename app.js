@@ -35,7 +35,7 @@ app.use(function (req, res, next) {
 });
 
 // Information Disclosure
-app.disable('x-powered-by');
+// app.disable('x-powered-by');
 
 app.use(logger('dev'));
 app.use(express.json());
