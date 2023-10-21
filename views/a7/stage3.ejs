@@ -11,7 +11,7 @@
 		<p class="cyberpunk inverse dotted scannedh">
 			Cross-site Scripting (XSS) is a code injection technique. That allows the attacker to execute scripts in a web browser of the victim by including malicious code in a legitimate web page or web application.
 			<br/><br/>
-			<kbd>Your mission</kbd> - Try to inject alert('CPR') in the input field.<b/>
+			<kbd>Your mission</kbd> - Try to inject alert('CPR') in the input field.
 		<p/>
 	</section>
 
@@ -20,20 +20,20 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-md-offset-2 col-md-8">
-					<form method="get" action="3">
-						<h4>Search for your favorite food:</h4>
-						<input class="cyberpunk" type="text" placeholder="Apple" name="search" value="<%- search %>">
+					<h4>Search for your favorite food:</h4>
+					<input class="cyberpunk" type="text" placeholder="Apple" id="input">
+					<select class="cyberpunk" id="select">
+						<option value="IL">IL</option>
+						<option value="USA">USA</option>
+					</select>
 
-						<br/>
+					<br/>
 
-						<h2 class="cyberpunk" id="notification">
-							<%= search %>
-						</h2>
+					<h2 class="cyberpunk" id="notification" hidden="true"></h2>
 
-						<div class="center-cyberpunk">
-							<button type="submit" class="cyberpunk2077 red">Submit_</button>
-						</div>
-					</form>
+					<div class="center-cyberpunk">
+						<button type="submit" class="cyberpunk2077 red" id="search">Submit_</button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -41,5 +41,21 @@
 
 	<section class="cyberpunk black">
 	</section>
+
 </body>
+<script>
+
+    $("#search").click(function () {
+
+        fetch("/api/xss/stage/4?"+ new URLSearchParams({
+            search: $("#input").val(),
+            country: $("#select").val()
+        }))
+        .then((resp) => resp.json())
+        .then(function (data) {
+            $("#notification").show(500).html(`No result for: ${data.msg} at ${data.country}`);
+        });
+    });
+
+</script>
 </html>

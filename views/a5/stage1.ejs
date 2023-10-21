@@ -2,16 +2,17 @@
 <html>
 <% include ../pages/header %>
 <body>
+
 	<section class="cyberpunk black">
 		<a href="/">🤘 main page</a>
 
 		<h1 class="cyberpunk">
-			A5 - Security Misconfiguration < <%= stage %> >
+			Parameter Tampering < <%= stage %> >
 		</h1>
 		<p class="cyberpunk inverse dotted scannedh">
-			Local File Inclusion is the process of including files, that are already locally present on the server, through the exploiting of vulnerable inclusion procedures implemented in the application.
+			Parameter tampering is a form attack in which certain parameters in the (URL) or Web page form field data entered by a user are change the user authorization and scope.
 			<br/><br/>
-			<kbd>Your mission</kbd> - Try to read /etc/passwd via "Local File Inclusion" vulnerability.<b/>
+			<kbd>Your mission</kbd> try to get a 500 point <b/>
 		<p/>
 	</section>
 
@@ -20,10 +21,18 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-md-offset-2 col-md-8">
-					<h1 class="cyberpunk">Logs content</h1>
-					<textarea class="cyberpunk" cols="10" rows="10">
-								<%= output %>
-					</textarea>
+
+					<h2 class="cyberpunk">Login:</h2>
+					USER: <input type="text" disabled="disabled" class="cyberpunk" placeholder="User" id="creds">
+					<br/>
+					SCORE: <input type="text" disabled="disabled" class="cyberpunk" placeholder="Your Score" id="score">
+
+					<h2 class="cyberpunk" id="notification" hidden="true"></h2>
+
+					<div class="center-cyberpunk">
+						<button type="submit" class="cyberpunk2077 red" id="add_score">PLAY</button>
+					</div>
+
 				</div>
 			</div>
 		</div>
@@ -32,5 +41,33 @@
 	<section class="cyberpunk black">
 	</section>
 
+	<script>
+		$.ajax({
+			url: "/api/get_score/<%= username %>",
+			type: "POST",
+			contentType: "application/json",
+			data: JSON.stringify({}),
+			success: function(data)
+			{
+				$("#creds").val(data.username);
+				$("#score").val(data.score);
+			}
+		});
+
+		$("#add_score").on("click", function (){
+
+			$("#score").val( +$("#score").val() + 1 );
+
+			$.ajax({
+				url: "/api/add_score/<%= username %>",
+				type: "POST",
+				contentType: "application/json",
+				data: JSON.stringify({
+					"score": $("#score").val(),
+					"hash": Number( $("#score").val()) ^ 0x07
+				})
+			});
+		});
+	</script>
 </body>
 </html>

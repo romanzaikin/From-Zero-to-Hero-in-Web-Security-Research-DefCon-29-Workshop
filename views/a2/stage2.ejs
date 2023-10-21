@@ -7,12 +7,12 @@
 		<a href="/">🤘 main page</a>
 
 		<h1 class="cyberpunk">
-			Insufficient Anti Automation < <%= stage %> >
+			A2 - Broken Authentication (JWT) < <%= stage %> >
 		</h1>
 		<p class="cyberpunk inverse dotted scannedh">
-			Insufficient Anti-automation is when a web site permits an attacker to automate a process that should only be performed manually. Certain web site functionalities should be protected against automated attacks.
+			JSON Web Token is a standard used to create access tokens for an application. It works this way: the server generates a token that certifies the user identity, and sends it to the client.
 			<br/><br/>
-			<kbd>Your mission</kbd> - Guess my password it's a number between 1000 to 9000 <b/>
+			<kbd>Your mission</kbd> - Try to login to the user "roman" by spoofing the JWT Token <b/>
 		<p/>
 	</section>
 
@@ -22,17 +22,14 @@
 			<div class="row">
 				<div class="col-md-offset-2 col-md-8">
 
-					<h2 class="cyberpunk">Login:</h2>
-					CREDENTIALS: <input type="text" disabled="disabled" class="cyberpunk" placeholder="Insert your username\email" id="creds" value="roman">
+					USER: <input type="text" class="cyberpunk" placeholder="Your Username" id="creds">
 					<br/>
-					PASSWORD: <input type="text" class="cyberpunk" placeholder="Insert your password" id="password">
-
-					<h2 class="cyberpunk" id="notification" hidden="true"></h2>
+					ROLE: <input type="text" class="cyberpunk" placeholder="Your Role" id="role">
 
 					<div class="center-cyberpunk">
-						<button type="submit" class="cyberpunk2077 red" id="search">Submit_</button>
+						<button type="submit" class="cyberpunk2077 red" id="search">Refresh_</button>
 					</div>
-
+					<br/>
 				</div>
 			</div>
 		</div>
@@ -40,27 +37,35 @@
 
 	<section class="cyberpunk black">
 	</section>
-
+	<script src="/assets/js/jwt-decode.js"></script>
 	<script>
-		const ascii_to_hex = (str) => {
-			let arr1 = [];
-			for (let n = 0, l = str.length; n < l; n ++)
+		$.ajax({
+			url: "/api/login_jwt/",
+			type: "POST",
+			contentType: "application/json",
+			data: JSON.stringify({}),
+			success: function(data)
 			{
-				let hex = Number(str.charCodeAt(n)).toString(16);
-				arr1.push(hex);
-			}
-			return arr1.join('');
-		}
+				localStorage.setItem("jwt",data.token);
 
-		$("#search").click(function () {
-			if (ascii_to_hex($("#password").val()) == $("#anti_automation_password").val()){
-					$("#notification").show(500).html("welcome roman, role: admin").delay(2500).hide(500);
-			}else{
-				$("#notification").show(500).html("wrong password").delay(2500).hide(500);
+				$("#creds").val(jwt_decode(data.token).username);
+				$("#role").val(jwt_decode(data.token).role);
 			}
 		});
-	</script>
 
-	<input type="hidden" value="<%= password %>" id="anti_automation_password">
+		$("#search").click(function () {
+			$.ajax({
+				url: "/api/login_jwt_relogin/",
+				type: "POST",
+				contentType: "application/json",
+				data: JSON.stringify({"jwt":localStorage.getItem("jwt")}),
+				success: function(data)
+				{
+					$("#creds").val(data.username);
+					$("#role").val(data.role);
+				}
+			});
+		});
+	</script>
 </body>
 </html>

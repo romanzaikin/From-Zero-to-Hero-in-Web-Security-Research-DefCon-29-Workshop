@@ -152,18 +152,14 @@ router.get('/a5/stage/:id', function(req, res, next) {
 
     switch (req.params.id) {
         case "1":
-            fs.readFile('./views/a5/'+req.query.file, function (err, data) {
-
-                return res.render(`a5/stage${req.params.id}`,
-                    {
-                        title: `Stage${req.params.id}`,
-                        stage: req.params.id,
-                        output: data
-                    });
-            });
-            break;
-
         case "2":
+            return res.render(`a5/stage${req.params.id}`,
+                {
+                    title: `Stage${req.params.id}`,
+                    stage: req.params.id,
+                    username: sess.username
+                });
+        case "3":
             let options = {
                 url:  req.query.file.includes("http") ? req.query.file : "http://127.0.0.1:3000/logs/data.log",
                 timeout: 3000
@@ -179,15 +175,6 @@ router.get('/a5/stage/:id', function(req, res, next) {
                     });
             });
             break;
-
-        case "3":
-        case "4":
-            return res.render(`a5/stage${req.params.id}`,
-                {
-                    title: `Stage${req.params.id}`,
-                    stage: req.params.id,
-                    username: sess.username
-                });
 
         default:
             return res.render("a5/stage1",{title:"Stage1", stage: 1});
@@ -252,28 +239,8 @@ router.get('/a2/stage/:id', function(req, res, next) {
                 });
 
         case "2":
-            sess.anti_automation_password = ascii_to_hex(Math.floor(Math.random() * 9000) + 1000);
-
-            return res.render(`a2/stage${req.params.id}`,
-                {
-                    title: `Stage${req.params.id}`,
-                    stage: req.params.id,
-                    password: sess.anti_automation_password
-                });
-
         case "3":
         case "4":
-            sess.anti_automation_password = ascii_to_hex(Math.floor(Math.random() * 9000) + 1000);
-
-            return res.render(`a2/stage${req.params.id}`,
-                {
-                    title: `Stage${req.params.id}`,
-                    stage: req.params.id,
-                });
-
-        case "5":
-        case "6":
-        case "7":
             return res.render(`a2/stage${req.params.id}`,
                 {
                     title: `Stage${req.params.id}`,
