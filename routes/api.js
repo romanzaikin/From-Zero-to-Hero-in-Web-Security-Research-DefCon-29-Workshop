@@ -178,6 +178,7 @@ router.get('/api/user', function(req, res, next) {
 // A6 - CORS | CSRF
 router.get('/api/whoami', function(req, res, next) {
     let sess = req.session;
+    let callback = req.query.callback;
     let origin = req.get('origin');
 
     // Allow CORS
@@ -188,12 +189,20 @@ router.get('/api/whoami', function(req, res, next) {
         // res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS"); //Not Mandatory
     }
 
-    return res.json(
-        {
-            username: sess.username,
-            email: sess.email,
-            role: sess.role
-        });
+    let data = {
+        username: sess.username,
+        email: sess.email,
+        role: sess.role
+    };
+
+    if (callback) {
+        // Return data wrapped in callback function for JSONP
+        res.type('text/javascript');
+        res.send(`${callback}(${JSON.stringify(data)});`);
+    } else {
+        // Return normal JSON if no callback is specified
+        res.json(data);
+    }
 });
 
 router.post('/api/message', middleware_session_verify, function(req, res, next) {

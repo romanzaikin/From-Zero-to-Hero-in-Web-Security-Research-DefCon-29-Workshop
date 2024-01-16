@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JSONP API Client</title>
+</head>
+<body>
+    <h1>JSONP API Client</h1>
+    <button onclick="fetchWhoAmI()">Fetch Who Am I</button>
+    <p id="result"></p>
+
+    <script>
+        function fetchWhoAmI() {
+            // Define the callback function
+            window.myJsonpCallback = function(data) {
+                document.getElementById('result').textContent = JSON.stringify(data);
+            };
+
+            // Create a script element for JSONP
+            var script = document.createElement('script');
+            script.src = 'http://127.0.01:3000/api/whoami?callback=myJsonpCallback'; 
+            document.body.appendChild(script);
+        }
+    </script>
+</body>
+</html>
