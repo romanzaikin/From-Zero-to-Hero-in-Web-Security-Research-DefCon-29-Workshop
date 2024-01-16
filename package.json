@@ -22,6 +22,7 @@
     "mongoose": "~5.12.7",
     "morgan": "~1.9.1",
     "request": "~2.88.2",
+    "swagger-ui-express": "^5.0.0",
     "uuid4": "~2.0.2"
   }
 }

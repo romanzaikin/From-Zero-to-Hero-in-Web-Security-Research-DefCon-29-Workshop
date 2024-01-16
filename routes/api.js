@@ -6,7 +6,6 @@ const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const path = require("path");
 
-// const libxmljs = require("libxmljs");
 const uuid4 = require("uuid4");
 const mathjs = require('mathjs')
 
@@ -87,10 +86,40 @@ router.post('/api/calc', function(req, res, next) {
 
 });
 
-// A7 - XSS
+//A7
+/**
+ * @swagger
+ * /api/xss/stage/{id}:
+ *   get:
+ *     summary: Returns data based on the XSS stage ID
+ *     description: Retrieves data or message depending on the XSS stage ID provided
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The XSS stage ID
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Search query parameter
+ *       - in: query
+ *         name: country
+ *         schema:
+ *           type: string
+ *         description: Country query parameter
+ *     responses:
+ *       200:
+ *         description: Success response with data or message
+ *       default:
+ *         description: Unexpected error
+ */
 router.get('/api/xss/stage/:id', function(req, res, next) {
     switch (req.params.id){
         case "1":
+        case "5":
         case "6":
             return res.status(200).send(
                 req.query.search
@@ -380,21 +409,6 @@ router.get('/api/all_users', function(req, res, next) {
 
 });
 
-
-
-// A4 - XXE
-router.post('/api/xxe/stage/:id', function(req, res, next) {
-    switch (req.params.id){
-        case "1":
-        case "2":
-            let xmldata = libxmljs.parseXmlString(req.body.toString('utf8'), {noent:true, noblanks:true})
-            return res.status(200).json({msg: `welcome ${xmldata.root().childNodes()[0].text()}`});
-
-        default:
-            return res.status(200).json({msg: "not found!"});
-    }
-});
-
 // A2 - Broken Authentication
 router.post('/api/login_uuid', function(req, res, next) {
 
@@ -517,7 +531,7 @@ router.post('/api/login_jwt_relogin/:type?', function(req, res, next) {
 
             }
 
-        }else if (req.params.type == 'rs256'){
+        } else if (req.params.type == 'rs256'){
 
             const publicKey = fs.readFileSync('./public/keys/jwtRS256.key.pub');
             jwt_hash = jwt.verify(req.body.jwt, publicKey, {algorithms: ['RS256']})
@@ -531,6 +545,74 @@ router.post('/api/login_jwt_relogin/:type?', function(req, res, next) {
         return res.status(401).json({success: false, msg: "Invalid JWT"});
     }
 
+});
+
+/**
+ * @swagger
+ * /api/generate_jwt/{type}:
+ *   post:
+ *     summary: Generates a JWT token
+ *     description: Generates a JWT token based on the specified type (HS256 or RS256) and user credentials
+ *     parameters:
+ *       - in: path
+ *         name: type
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: The type of JWT algorithm to use (HS256 or RS256)
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 description: Username for the JWT token
+ *               role:
+ *                 type: string
+ *                 description: Role for the JWT token
+ *     responses:
+ *       200:
+ *         description: Successfully generated JWT token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 token:
+ *                   type: string
+ *       default:
+ *         description: Unexpected error
+ */
+router.post('/api/generate_jwt/:type?', function(req, res, next) {
+    let jwt_hash = "";
+
+    if (req.params.type == 'HS256'){
+        jwt_hash = jwt.sign(
+            { username: req.body.username , role: req.body.role},
+            "secret",
+            {
+                algorithm: "HS256",
+                expiresIn: "2h",
+            });
+        console.log(jwt_hash);
+    } else if (req.params.type  == 'RS256'){
+        const privateKey = fs.readFileSync('./public/keys/jwtRS256.key');
+        jwt_hash = jwt.sign(
+            { username: req.body.username , role: req.body.role},
+            privateKey,
+            {
+                algorithm: "RS256",
+                expiresIn: "2h",
+            });
+        console.log(jwt_hash);
+    }
+
+    return res.json({ success: true, token: jwt_hash});
 });
 
 // A1 - noSQLi

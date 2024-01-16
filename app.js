@@ -5,7 +5,8 @@ const logger = require('morgan');
 const fileUpload = require('express-fileupload');           // handle file uploads
 const session = require('express-session');
 const bodyParser = require('body-parser');
-
+const swaggerJSDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 const urls = require('./routes/urls');
 const api = require('./routes/api');
 
@@ -52,6 +53,25 @@ app.use(fileUpload({
   limits: { fileSize: 50 * 1024 * 1024 },
   preserveExtension: true
 }));
+
+const swaggerDefinition = {
+  openapi: '3.0.0',
+  info: {
+    title: 'My API',
+    version: '1.0.0',
+    description: 'My API Documentation',
+  },
+};
+
+const options = {
+  swaggerDefinition,
+  // Paths to files containing OpenAPI definitions
+  apis: ['./routes/*.js'],
+};
+
+const swaggerSpec = swaggerJSDoc(options);
+
+app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(session({
   name: 'session',

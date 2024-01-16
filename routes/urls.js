@@ -76,8 +76,6 @@ router.get('/a7/stage/:id', function(req, res, next) {
         case "4":
         case "5":
         case "6":
-        case "7":
-        case "8":
             return res.render(`a7/stage${req.params.id}`,
                 {
                     title: `Stage${req.params.id}`,
@@ -88,8 +86,8 @@ router.get('/a7/stage/:id', function(req, res, next) {
                     image: req.query.image
                 });
 
-        case "7_real":
-            if( req.headers.referer ? req.headers.referer.includes("stage/7") : false){
+        case "5_real":
+            if( req.headers.referer ? req.headers.referer.includes("stage/5") : false){
                 return res.render(`a7/stage${req.params.id}`,
                     {
                         title: `Stage${req.params.id}`,
@@ -97,7 +95,7 @@ router.get('/a7/stage/:id', function(req, res, next) {
                         search: req.query.search,
                     });
             }else{
-                return res.redirect("/a7/stage/7?callback=/a7/stage/7_real");
+                return res.redirect("/a7/stage/5?callback=/a7/stage/5_real");
             }
 
         default:
@@ -232,12 +230,6 @@ router.get('/a2/stage/:id', function(req, res, next) {
 
     switch (req.params.id) {
         case "1":
-            return res.render(`a2/stage${req.params.id}`,
-                {
-                    title: `Stage${req.params.id}`,
-                    stage: req.params.id,
-                });
-
         case "2":
         case "3":
         case "4":

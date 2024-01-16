@@ -1,62 +1,31 @@
 <!DOCTYPE html>
 <html>
 <% include ../pages/header %>
-<body>
+<body>	<!-- Fixed navbar -->
+<section class="cyberpunk black">
+	<a href="/">🤘 main page</a>
 
-	<section class="cyberpunk black">
-		<a href="/">🤘 main page</a>
-
-		<h1 class="cyberpunk">
-			A4 - XML External Entities < <%= stage %> >
-		</h1>
-		<p class="cyberpunk inverse dotted scannedh">
-			Attackers can exploit vulnerable XML processors if they can upload XML or include hostile content in an XML document, exploiting vulnerable code, dependencies or integrations.
-			<br/><br/>
-			<kbd>Your mission</kbd> - Try to read /etc/passwd via "XML External Entities" vulnerability.<b/>
-		<p/>
-	</section>
-
-	<section class="cyberpunk">
-		<br>
-		<div class="container">
-			<div class="row">
-				<div class="col-md-offset-2 col-md-8">
-
-					<h2 class="cyberpunk">Login:</h2>
-					USERNAME: <input type="text" class="cyberpunk" placeholder="Insert your username" id="username">
-					<br/>
-					PASSWORD: <input type="text" class="cyberpunk" placeholder="Insert your password" id="password">
-
-					<h2 class="cyberpunk" id="notification" hidden="true"></h2>
-
-					<div class="center-cyberpunk">
-						<button type="submit" class="cyberpunk2077 red" id="search">Submit_</button>
-					</div>
-
-				</div>
+	<h1 class="cyberpunk">
+		A4 - Insecure Design < <%= stage %> >
+	</h1>
+	<p class="cyberpunk inverse dotted scannedh">
+		Secure Design emphasizes the importance of implementing security measures from the design phase, rather than just relying on finding and fixing vulnerabilities after development.
+		<br/><br/>
+		This category encourages proactive security practices, such as secure design patterns, and principles to reduce the risk of design-related security issues.
+	<p/>
+</section>
+<section class="cyberpunk">
+	<br>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-offset-2 col-md-8">
+				<h1 class="cyberpunk"><a href="https://owasp.org/Top10/A04_2021-Insecure_Design/" target="_blank">read more here</a></h1>
 			</div>
 		</div>
-	</section>
+	</div>
+</section>
+<section class="cyberpunk black">
+</section>
 
-	<section class="cyberpunk black">
-	</section>
-
-<script>
-    $("#search").click(function () {
-		fetch("/api/xxe/stage/1",
-			{
-				method: "POST",
-				headers: {
-					'Content-Type': 'text/xml'
-				},
-				body:  `<creds><user>${username.value}</user><pass>${password.value}</pass></creds>`
-			})
-			.then((resp) => resp.json())
-			.then(function(data) {
-				$("#notification").show(500).html(data.msg);
-			});
-    });
-
-</script>
 </body>
 </html>
