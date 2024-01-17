@@ -11,13 +11,11 @@
 
     <script>
         function fetchWhoAmI() {
-            // Define the callback function
             window.myJsonpCallback = function(data) {
                 document.getElementById('result').textContent = JSON.stringify(data);
             };
 
-            // Create a script element for JSONP
-            var script = document.createElement('script');
+            let script = document.createElement('script');
             script.src = 'http://127.0.01:3000/api/whoami?callback=myJsonpCallback'; 
             document.body.appendChild(script);
         }
